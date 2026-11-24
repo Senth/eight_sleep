@@ -38,7 +38,43 @@ MAX_TEMP_F = 110
 MAX_TEMP_C = 43
 TEMP_STEP = 1
 
-# Duration for heating/cooling in seconds (2 hours)
+if hasattr(ClimateEntity, "native_target_temperature"):
+    _NativeClimateEntity = ClimateEntity
+else:
+
+    class _NativeClimateEntity(ClimateEntity):
+        """Map the legacy temperature properties to the native ones.
+
+        Home Assistant before 2026.11 only reads the legacy properties.
+        Remove this once hacs.json requires Home Assistant 2026.11.
+        """
+
+        _attr_native_current_temperature: float | None = None
+        _attr_native_target_temperature: float | None = None
+
+        @property
+        def native_temperature_unit(self) -> str:
+            return self._attr_native_temperature_unit
+
+        @property
+        def native_current_temperature(self) -> float | None:
+            return self._attr_native_current_temperature
+
+        @property
+        def native_target_temperature(self) -> float | None:
+            return self._attr_native_target_temperature
+
+        @property
+        def temperature_unit(self) -> str:
+            return self.native_temperature_unit
+
+        @property
+        def current_temperature(self) -> float | None:
+            return self.native_current_temperature
+
+        @property
+        def target_temperature(self) -> float | None:
+            return self.native_target_temperature
 
 
 async def async_setup_entry(
