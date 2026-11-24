@@ -16,7 +16,7 @@ from custom_components.eight_sleep.climate import EightSleepThermostat
 @pytest.mark.asyncio
 async def test_the_thermostat_sets_a_level_without_a_time_limit():
     entity = MagicMock()
-    entity.temperature_unit = "°C"
+    entity.native_temperature_unit = "°C"
     entity._user_obj.set_heating_level = AsyncMock()
     entity._eight.update_device_data = AsyncMock()
     entity.coordinator.async_refresh = AsyncMock()
